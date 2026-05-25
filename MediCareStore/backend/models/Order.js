@@ -1,5 +1,4 @@
 const { query, transaction } = require('../config/db');
-const { v4: uuidv4 } = require('uuid');
 
 class Order {
   static generateOrderId() {

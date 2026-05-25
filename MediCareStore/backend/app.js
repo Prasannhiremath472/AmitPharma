@@ -4,6 +4,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const compression = require('compression');
 const rateLimit = require('express-rate-limit');
+const xss = require('xss');
 const path = require('path');
 
 const authRoutes = require('./routes/authRoutes');
@@ -19,9 +20,9 @@ const { errorHandler, notFound } = require('./middleware/errorMiddleware');
 
 const app = express();
 
-// Security middleware
+// Security headers
 app.use(helmet({
-  crossOriginResourcePolicy: { policy: 'cross-origin' }
+  crossOriginResourcePolicy: { policy: 'cross-origin' },
 }));
 
 // CORS
@@ -29,22 +30,22 @@ app.use(cors({
   origin: process.env.FRONTEND_URL || 'http://localhost:5173',
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
 }));
 
-// Rate limiting
+// Global rate limit
 const limiter = rateLimit({
-  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 900000,
+  windowMs: parseInt(process.env.RATE_LIMIT_WINDOW_MS) || 900000, // 15 min
   max: parseInt(process.env.RATE_LIMIT_MAX_REQUESTS) || 100,
-  message: { success: false, message: 'Too many requests, please try again later.' }
+  message: { success: false, message: 'Too many requests, please try again later.' },
 });
 app.use('/api/', limiter);
 
-// Auth rate limiting (stricter)
+// Auth rate limit (stricter)
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 20,
-  message: { success: false, message: 'Too many authentication attempts, please try again later.' }
+  message: { success: false, message: 'Too many authentication attempts, please try again later.' },
 });
 
 // Body parsing
@@ -52,29 +53,46 @@ app.use(compression());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
+// XSS sanitization middleware (replaces deprecated xss-clean)
+// Recursively sanitizes all string values in req.body
+const sanitizeBody = (obj) => {
+  if (!obj || typeof obj !== 'object') return;
+  Object.keys(obj).forEach((key) => {
+    if (typeof obj[key] === 'string') {
+      obj[key] = xss(obj[key]);
+    } else if (typeof obj[key] === 'object') {
+      sanitizeBody(obj[key]);
+    }
+  });
+};
+app.use((req, _res, next) => {
+  if (req.body) sanitizeBody(req.body);
+  next();
+});
+
 // Static files
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Health check
-app.get('/health', (req, res) => {
+app.get('/health', (_req, res) => {
   res.json({
     success: true,
-    message: 'MediCare Store API is running',
+    message: 'Amit R. Medical API is running',
     timestamp: new Date().toISOString(),
-    environment: process.env.NODE_ENV
+    environment: process.env.NODE_ENV,
   });
 });
 
 // API Routes
-app.use('/api/auth', authLimiter, authRoutes);
-app.use('/api/products', productRoutes);
+app.use('/api/auth',       authLimiter, authRoutes);
+app.use('/api/products',   productRoutes);
 app.use('/api/categories', categoryRoutes);
-app.use('/api/orders', orderRoutes);
-app.use('/api/cart', cartRoutes);
-app.use('/api/users', userRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/reviews', reviewRoutes);
-app.use('/api/coupons', couponRoutes);
+app.use('/api/orders',     orderRoutes);
+app.use('/api/cart',       cartRoutes);
+app.use('/api/users',      userRoutes);
+app.use('/api/admin',      adminRoutes);
+app.use('/api/reviews',    reviewRoutes);
+app.use('/api/coupons',    couponRoutes);
 
 // Error handling
 app.use(notFound);
