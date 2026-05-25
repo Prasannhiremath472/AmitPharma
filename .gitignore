@@ -1,15 +1,10 @@
-# Dependencies
+# Dependencies — never commit these
 node_modules/
 **/node_modules/
 
-# Environment variables - NEVER commit these
+# Environment variables — NEVER commit real .env
 .env
-.env.local
-.env.development
-.env.production
 **/.env
-**/.env.local
-**/.env.production
 
 # Build output
 dist/
@@ -20,24 +15,15 @@ build/
 *.log
 npm-debug.log*
 yarn-debug.log*
-yarn-error.log*
-lerna-debug.log*
 
 # OS files
 .DS_Store
-.DS_Store?
-._*
-.Spotlight-V100
-.Trashes
-ehthumbs.db
 Thumbs.db
 
-# Editor
-.vscode/settings.json
-.idea/
-*.swp
-*.swo
-
-# Uploads / temp
+# Uploads (user-uploaded files)
 uploads/
 temp/
+
+# Misc
+.idea/
+*.swp

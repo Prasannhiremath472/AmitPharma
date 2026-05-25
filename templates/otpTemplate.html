@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Email Verification - MediCare Store</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f0f9ff;font-family:'Segoe UI',Arial,sans-serif;">
+<table width="100%" cellpadding="0" cellspacing="0" style="background-color:#f0f9ff;padding:40px 20px;">
+  <tr>
+    <td align="center">
+      <table width="600" cellpadding="0" cellspacing="0" style="max-width:600px;background:white;border-radius:16px;overflow:hidden;box-shadow:0 4px 24px rgba(14,165,233,0.12);">
+        <!-- Header -->
+        <tr>
+          <td style="background:linear-gradient(135deg,#0ea5e9,#0284c7);padding:40px 30px;text-align:center;">
+            <h1 style="color:white;margin:0;font-size:28px;font-weight:700;letter-spacing:-0.5px;">
+              💊 MediCare Store
+            </h1>
+            <p style="color:#bae6fd;margin:8px 0 0;font-size:15px;">Your trusted healthcare partner</p>
+          </td>
+        </tr>
+        <!-- Body -->
+        <tr>
+          <td style="padding:40px 30px;">
+            <h2 style="color:#0f172a;margin:0 0 16px;font-size:22px;">Email Verification</h2>
+            <p style="color:#475569;font-size:16px;line-height:1.6;margin:0 0 24px;">
+              Hello <strong>{{NAME}}</strong>,<br>
+              Please use the OTP below to verify your email address:
+            </p>
+            <!-- OTP Box -->
+            <div style="background:linear-gradient(135deg,#f0f9ff,#e0f2fe);border:2px solid #bae6fd;border-radius:12px;padding:30px;text-align:center;margin:0 0 24px;">
+              <p style="color:#64748b;font-size:13px;margin:0 0 12px;text-transform:uppercase;letter-spacing:2px;font-weight:600;">Your OTP</p>
+              <div style="display:inline-block;">
+                <span style="font-size:52px;font-weight:800;color:#0ea5e9;letter-spacing:16px;font-family:'Courier New',monospace;">{{OTP}}</span>
+              </div>
+              <p style="color:#94a3b8;font-size:13px;margin:16px 0 0;">Valid for <strong>{{EXPIRE_MINUTES}} minutes</strong></p>
+            </div>
+            <!-- Warning -->
+            <div style="background:#fef3c7;border-left:4px solid #f59e0b;border-radius:4px;padding:16px;margin:0 0 24px;">
+              <p style="color:#92400e;font-size:14px;margin:0;">
+                ⚠️ <strong>Never share this OTP</strong> with anyone. MediCare Store will never ask for your OTP.
+              </p>
+            </div>
+            <p style="color:#94a3b8;font-size:14px;line-height:1.6;margin:0;">
+              If you didn't create an account on MediCare Store, you can safely ignore this email.
+            </p>
+          </td>
+        </tr>
+        <!-- Footer -->
+        <tr>
+          <td style="background:#f8fafc;padding:24px 30px;border-top:1px solid #e2e8f0;text-align:center;">
+            <p style="color:#94a3b8;font-size:13px;margin:0 0 8px;">
+              © 2024 MediCare Store. All rights reserved.
+            </p>
+            <p style="color:#94a3b8;font-size:12px;margin:0;">
+              Need help? Contact us at
+              <a href="mailto:support@medicarestore.com" style="color:#0ea5e9;text-decoration:none;">support@medicarestore.com</a>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
